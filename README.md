@@ -3,6 +3,9 @@ angular-modal
 
 An AngularJS directive and service for the foundation modal
 
+## Install
+
+Download latest release from [here](https://github.com/aklaiber/angular-modal/tree/master/build)
 
 ## Usage
 
