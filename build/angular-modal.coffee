@@ -7,7 +7,7 @@ angularModal.directive "ngFoundationModal", ($log, ModalService)->
   restrict: 'E'
   transclude: true
   replace: true
-  templateUrl: '/assets/angularjs/templates/modal.html'
+  template: '<div class="reveal-modal"><a class="close-reveal-modal">&#215;</a><div ng-transclude></div></div>'
   link: (scope, element, attrs) ->
     scope.service = ModalService
     scope.$watch 'service.open', (modalId)->
