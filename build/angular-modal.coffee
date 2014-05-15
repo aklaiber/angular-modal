@@ -1,7 +1,6 @@
-angularModal = angular.module('angularModal', []);
+# angular-modal - v0.1.0 - 2014-05-15
 
-angularModal.factory "ModalService", ->
-  open: null
+angularModal = angular.module('angularModal', [])
 
 angularModal.directive "ngFoundationModal", ($log, ModalService)->
   restrict: 'E'
@@ -21,3 +20,6 @@ angularModal.directive "ngOpenModal", ($log, ModalService)->
     element.on 'click', ->
       scope.$apply ->
         scope.service.open = attrs.ngOpenModal
+
+angularModal.factory "ModalService", ->
+  open: null
