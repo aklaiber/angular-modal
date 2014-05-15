@@ -3,10 +3,6 @@ angular-modal
 
 An AngularJS directive and service for the foundation modal
 
-## Install
-
-Download latest release from [here](https://github.com/aklaiber/angular-modal/tree/master/build)
-
 ## Usage
 
 ```html
@@ -23,3 +19,11 @@ angular.module('myApp', ['angularModal']);
 
 <button ng-open-modal="#test-foundation-modal">Open Modal</button>
 ```
+
+## Dependencies
+
+http://foundation.zurb.com/
+
+## Install
+
+Download latest release from [here](https://github.com/aklaiber/angular-modal/tree/master/build)
