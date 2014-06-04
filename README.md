@@ -13,11 +13,12 @@ angular.module('myApp', ['angularModal']);
 ```
 
 ```html
-<ng-foundation-modal id="test-foundation-modal">
+<div id="test-foundation-modal" class="reveal-modal" data-reveal ng-foundation-modal>
   Test foundation modal
-</ng-foundation-modal>
+</div>
 
 <button ng-open-modal="#test-foundation-modal">Open Modal</button>
+<button ng-close-modal="#test-foundation-modal">Close Modal</button>
 ```
 
 ## Dependencies

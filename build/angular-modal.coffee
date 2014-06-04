@@ -1,18 +1,28 @@
-# angular-modal - v0.1.0 - 2014-05-15
+# angular-modal - v0.2.0 - 2014-06-04
 
 angularModal = angular.module('angularModal', [])
 
-angularModal.directive "ngFoundationModal", ($log, ModalService)->
-  restrict: 'E'
-  transclude: true
-  replace: true
-  template: '<div class="reveal-modal"><a class="close-reveal-modal">&#215;</a><div ng-transclude></div></div>'
+angularModal.directive "ngCloseModal", ($log, ModalService)->
   link: (scope, element, attrs) ->
     scope.service = ModalService
+    element.on 'click', ->
+      scope.$apply ->
+        scope.service.close = attrs.ngCloseModal
+
+angularModal.directive "ngFoundationModal", ($log, ModalService)->
+  restrict: 'A'
+  link: (scope, element, attrs) ->
+    scope.service = ModalService
+
     scope.$watch 'service.open', (modalId)->
       if modalId?
-        $(modalId).foundation 'reveal', 'open'
+        $("\##{modalId}").foundation('reveal', 'open')
         scope.service.open = null
+
+    scope.$watch 'service.close', (modalId)->
+      if modalId?
+        $("\##{modalId}").foundation('reveal', 'close')
+        scope.service.close = null
 
 angularModal.directive "ngOpenModal", ($log, ModalService)->
   link: (scope, element, attrs) ->
@@ -23,3 +33,4 @@ angularModal.directive "ngOpenModal", ($log, ModalService)->
 
 angularModal.factory "ModalService", ->
   open: null
+  close: null

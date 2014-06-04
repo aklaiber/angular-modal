@@ -3,18 +3,34 @@
 
   angularModal = angular.module('angularModal', []);
 
-  angularModal.directive("ngFoundationModal", function($log, ModalService) {
+  angularModal.directive("ngCloseModal", function($log, ModalService) {
     return {
-      restrict: 'E',
-      transclude: true,
-      replace: true,
-      template: '<div class="reveal-modal"><a class="close-reveal-modal">&#215;</a><div ng-transclude></div></div>',
       link: function(scope, element, attrs) {
         scope.service = ModalService;
-        return scope.$watch('service.open', function(modalId) {
+        return element.on('click', function() {
+          return scope.$apply(function() {
+            return scope.service.close = attrs.ngCloseModal;
+          });
+        });
+      }
+    };
+  });
+
+  angularModal.directive("ngFoundationModal", function($log, ModalService) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        scope.service = ModalService;
+        scope.$watch('service.open', function(modalId) {
           if (modalId != null) {
-            $(modalId).foundation('reveal', 'open');
+            $("\#" + modalId).foundation('reveal', 'open');
             return scope.service.open = null;
+          }
+        });
+        return scope.$watch('service.close', function(modalId) {
+          if (modalId != null) {
+            $("\#" + modalId).foundation('reveal', 'close');
+            return scope.service.close = null;
           }
         });
       }
@@ -36,7 +52,8 @@
 
   angularModal.factory("ModalService", function() {
     return {
-      open: null
+      open: null,
+      close: null
     };
   });
 
