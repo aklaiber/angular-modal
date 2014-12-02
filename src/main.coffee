@@ -1,1 +1,1 @@
-angularModal = angular.module('angularModal', [])
+angular.module('angularModal', [])

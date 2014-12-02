@@ -1,59 +1,78 @@
 (function() {
-  var angularModal;
-
-  angularModal = angular.module('angularModal', []);
-
-  angularModal.directive("ngCloseModal", function($log, ModalService) {
+  angular.module('angularModal').directive("ngCloseModal", function($log, modalService) {
     return {
       link: function(scope, element, attrs) {
-        scope.service = ModalService;
+        scope.service = modalService;
         return element.on('click', function() {
-          return scope.$apply(function() {
-            return scope.service.close = attrs.ngCloseModal;
-          });
+          return scope.service.close(attrs.ngCloseModal);
         });
       }
     };
   });
 
-  angularModal.directive("ngFoundationModal", function($log, ModalService) {
+  angular.module('angularModal').directive("ngFoundationModal", function($log, $rootScope, modalService) {
+    ({
+      restrict: 'A'
+    });
+    $(document).on('open.fndtn.reveal', '[data-reveal]', function(event) {
+      modalService.state = 'open';
+      modalService.modalId = $(event.target).attr('id');
+      if (!$rootScope.$$phase) {
+        return $rootScope.$apply();
+      }
+    });
+    $(document).on('opened.fndtn.reveal', '[data-reveal]', function(event) {
+      modalService.state = 'opened';
+      modalService.modalId = $(event.target).attr('id');
+      if (!$rootScope.$$phase) {
+        return $rootScope.$apply();
+      }
+    });
+    $(document).on('close.fndtn.reveal', '[data-reveal]', function(event) {
+      modalService.state = 'close';
+      modalService.modalId = $(event.target).attr('id');
+      if (!$rootScope.$$phase) {
+        return $rootScope.$apply();
+      }
+    });
+    $(document).on('closed.fndtn.reveal', '[data-reveal]', function(event) {
+      modalService.state = 'closed';
+      modalService.modalId = $(event.target).attr('id');
+      if (!$rootScope.$$phase) {
+        return $rootScope.$apply();
+      }
+    });
     return {
-      restrict: 'A',
       link: function(scope, element, attrs) {
-        scope.service = ModalService;
-        scope.$watch('service.open', function(modalId) {
-          if (modalId != null) {
-            $("\#" + modalId).foundation('reveal', 'open');
-            return scope.service.open = null;
-          }
-        });
-        return scope.$watch('service.close', function(modalId) {
-          if (modalId != null) {
-            $("\#" + modalId).foundation('reveal', 'close');
-            return scope.service.close = null;
-          }
-        });
+        return scope.service = modalService;
       }
     };
   });
 
-  angularModal.directive("ngOpenModal", function($log, ModalService) {
+  angular.module('angularModal').directive("ngOpenModal", function($log, modalService) {
     return {
       link: function(scope, element, attrs) {
-        scope.service = ModalService;
+        scope.service = modalService;
         return element.on('click', function() {
-          return scope.$apply(function() {
-            return scope.service.open = attrs.ngOpenModal;
-          });
+          return scope.service.open(attrs.ngOpenModal);
         });
       }
     };
   });
 
-  angularModal.factory("ModalService", function() {
+  angular.module('angularModal').factory("modalService", function() {
     return {
-      open: null,
-      close: null
+      state: null,
+      modalId: null,
+      open: function(modalId) {
+        $("\#" + modalId).foundation('reveal', 'open');
+        return true;
+      },
+      close: function(modalId) {
+        modalId || (modalId = this.modalId);
+        $("\#" + modalId).foundation('reveal', 'close');
+        return true;
+      }
     };
   });
 

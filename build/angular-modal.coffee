@@ -1,36 +1,56 @@
-# angular-modal - v0.2.0 - 2014-06-04
+# angular-modal - v0.3.0 - 2014-12-02
 
-angularModal = angular.module('angularModal', [])
+angular.module('angularModal', [])
 
-angularModal.directive "ngCloseModal", ($log, ModalService)->
-  link: (scope, element, attrs) ->
-    scope.service = ModalService
-    element.on 'click', ->
-      scope.$apply ->
-        scope.service.close = attrs.ngCloseModal
+angular.module('angularModal').factory "modalService", ->
+  state: null   # one of 'open', 'opened', 'close', 'closed'
+  modalId: null # current modal id (remains after 'closed')
 
-angularModal.directive "ngFoundationModal", ($log, ModalService)->
+  # open modal with the given id
+  open: (modalId) ->
+    $("\##{modalId}").foundation('reveal', 'open')
+    true
+
+  # close modal with the given id or current modal if no id is given
+  close: (modalId) ->
+    modalId ||= this.modalId
+    $("\##{modalId}").foundation('reveal', 'close')
+    true
+
+angular.module('angularModal').directive "ngFoundationModal", ($log, $rootScope, modalService)->
   restrict: 'A'
+
+  $(document).on 'open.fndtn.reveal', '[data-reveal]', (event) ->
+    modalService.state = 'open'
+    modalService.modalId = $(event.target).attr('id')
+    $rootScope.$apply() unless $rootScope.$$phase
+
+  $(document).on 'opened.fndtn.reveal', '[data-reveal]', (event) ->
+    modalService.state = 'opened'
+    modalService.modalId = $(event.target).attr('id')
+    $rootScope.$apply() unless $rootScope.$$phase
+
+  $(document).on 'close.fndtn.reveal', '[data-reveal]', (event) ->
+    modalService.state = 'close'
+    modalService.modalId = $(event.target).attr('id')
+    $rootScope.$apply() unless $rootScope.$$phase
+
+  $(document).on 'closed.fndtn.reveal', '[data-reveal]', (event) ->
+    modalService.state = 'closed'
+    modalService.modalId = $(event.target).attr('id')
+    $rootScope.$apply() unless $rootScope.$$phase
+
   link: (scope, element, attrs) ->
-    scope.service = ModalService
+    scope.service = modalService
 
-    scope.$watch 'service.open', (modalId)->
-      if modalId?
-        $("\##{modalId}").foundation('reveal', 'open')
-        scope.service.open = null
-
-    scope.$watch 'service.close', (modalId)->
-      if modalId?
-        $("\##{modalId}").foundation('reveal', 'close')
-        scope.service.close = null
-
-angularModal.directive "ngOpenModal", ($log, ModalService)->
+angular.module('angularModal').directive "ngOpenModal", ($log, modalService)->
   link: (scope, element, attrs) ->
-    scope.service = ModalService
+    scope.service = modalService
     element.on 'click', ->
-      scope.$apply ->
-        scope.service.open = attrs.ngOpenModal
+      scope.service.open(attrs.ngOpenModal)
 
-angularModal.factory "ModalService", ->
-  open: null
-  close: null
+angular.module('angularModal').directive "ngCloseModal", ($log, modalService)->
+  link: (scope, element, attrs) ->
+    scope.service = modalService
+    element.on 'click', ->
+      scope.service.close(attrs.ngCloseModal)

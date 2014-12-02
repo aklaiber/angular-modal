@@ -1,6 +1,5 @@
-angularModal.directive "ngOpenModal", ($log, ModalService)->
+angular.module('angularModal').directive "ngOpenModal", ($log, modalService)->
   link: (scope, element, attrs) ->
-    scope.service = ModalService
+    scope.service = modalService
     element.on 'click', ->
-      scope.$apply ->
-        scope.service.open = attrs.ngOpenModal
+      scope.service.open(attrs.ngOpenModal)

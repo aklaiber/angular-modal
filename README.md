@@ -17,8 +17,8 @@ angular.module('myApp', ['angularModal']);
   Test foundation modal
 </div>
 
-<button ng-open-modal="#test-foundation-modal">Open Modal</button>
-<button ng-close-modal="#test-foundation-modal">Close Modal</button>
+<button ng-open-modal="test-foundation-modal">Open Modal</button>
+<button ng-close-modal="test-foundation-modal">Close Modal</button>
 ```
 
 ## Dependencies

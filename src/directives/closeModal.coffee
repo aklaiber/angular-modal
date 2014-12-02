@@ -1,6 +1,5 @@
-angularModal.directive "ngCloseModal", ($log, ModalService)->
+angular.module('angularModal').directive "ngCloseModal", ($log, modalService)->
   link: (scope, element, attrs) ->
-    scope.service = ModalService
+    scope.service = modalService
     element.on 'click', ->
-      scope.$apply ->
-        scope.service.close = attrs.ngCloseModal
+      scope.service.close(attrs.ngCloseModal)

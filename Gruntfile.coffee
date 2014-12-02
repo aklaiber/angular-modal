@@ -8,7 +8,7 @@ module.exports = (grunt)->
         stripBanners: true
         banner: '# <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %>\n\n'
       dist:
-        src: ['src/main.coffee', 'src/directives/*.coffee','src/services/*.coffee']
+        src: ['src/main.coffee', 'src/services/*.coffee', 'src/directives/foundationModal.coffee', 'src/directives/openModal.coffee', 'src/directives/closeModal.coffee']
         dest: 'build/<%= pkg.name %>.coffee'
 
     uglify:
@@ -23,7 +23,7 @@ module.exports = (grunt)->
         options:
           join: true
         files:
-          'build/<%= pkg.name %>.js': ['src/main.coffee', 'src/directives/*.coffee','src/services/*.coffee']
+          'build/<%= pkg.name %>.js': ['src/directives/*.coffee','src/services/*.coffee']
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-coffee');
